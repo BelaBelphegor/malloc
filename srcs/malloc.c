@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/21 01:34:08 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/21 07:12:27 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/21 07:28:48 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ static void		*claim_memory(t_header **head, size_t size)
 
 void			*malloc(size_t size)
 {
+	write(2, "my malloc\n", 10);
 	void		*pointer;
 	if (!size)
 		return (NULL);

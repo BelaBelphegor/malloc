@@ -6,7 +6,7 @@
 #    By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/10 14:48:27 by tiboitel          #+#    #+#              #
-#    Updated: 2016/07/21 07:14:08 by tiboitel         ###   ########.fr        #
+#    Updated: 2016/07/21 07:25:18 by tiboitel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS)
 	$(CC) -shared -o $(NAME) $(OBJS) $(CFLAGS) $(INCLUDE_C)
-	@ln -s libft_malloc.so
+	@ln -s $(NAME) libft_malloc.so
 %.o: %.c
 	$(CC) -o $@ $(INCLUDES_O) -c $<
 
