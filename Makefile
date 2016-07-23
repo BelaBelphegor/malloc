@@ -6,7 +6,7 @@
 #    By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/10 14:48:27 by tiboitel          #+#    #+#              #
-#    Updated: 2016/07/21 07:25:18 by tiboitel         ###   ########.fr        #
+#    Updated: 2016/07/23 16:47:05 by tiboitel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ ifeq ($(HOSTTYPE),)
 endif
 
 NAME		=	libft_malloc_$(HOSTTYPE).so
-SRCS		=	malloc.c
+SRCS		=	malloc.c \
+				free.c
 INCLUDES	=	./includes
 SRCSPATH	=	./srcs/
 CC			=	gcc
@@ -40,5 +41,9 @@ fclean:			clean
 	rm -rf libft_malloc.so
 
 re: fclean all
+
+test: all
+	gcc `pwd`/test/main.c -o `pwd`/test/test
+	env DYLD_LIBRARY_PATH=`pwd` DYLD_INSERT_LIBRARIES=libft_malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 ./test/test
 
 .PHONY: clean fclean re

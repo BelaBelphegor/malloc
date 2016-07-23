@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/21 01:34:08 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/21 07:28:48 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/23 16:04:22 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static t_header	*header_create(t_header **head, size_t size)
 	tmp = *head;
 	page_size = getpagesize();
 	if (size <= SMALL)
-		size *= 100 + (100 % page_size);
-	size = (((size + sizeof(t_block) * 2 + sizeof(t_header)) / page_size) + 1) * page_size;
+		size *= 100;
+	size = (((size + sizeof(t_block) * 2 + sizeof(t_header)) / page_size) + 2) * page_size + 1;
 	if ((header = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) ==
 		MAP_FAILED)
 		return (NULL);
@@ -108,7 +108,7 @@ static t_block	*block_create(t_header *head, size_t size)
 	block->size = size;
 	block->freed = 0;
 	block->pointer = pointer;
-	head->used += sizeof(t_block);
+	head->used += size + sizeof(t_block);
 	tmp = block + 1;
 	tmp->size = 0;
 	tmp->freed = 0;
@@ -131,8 +131,8 @@ static void		*claim_memory(t_header **head, size_t size)
 
 void			*malloc(size_t size)
 {
-	write(2, "my malloc\n", 10);
 	void		*pointer;
+	
 	if (!size)
 		return (NULL);
 	pthread_mutex_lock(&(g_maps.mutex));

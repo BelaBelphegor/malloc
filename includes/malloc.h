@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 14:59:27 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/21 07:13:21 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/23 16:02:27 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <stddef.h>
 
 #define TINY 512
-#define SMALL 1536
+#define SMALL 2048
 
 typedef struct		s_header
 {
