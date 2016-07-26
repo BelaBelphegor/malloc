@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 14:59:27 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/23 16:02:27 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/26 16:47:40 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,21 @@ typedef struct		s_block
 	unsigned int	freed:1;
 }					t_block;
 
+typedef struct		s_maps_enquiry
+{
+	t_header		**head;
+	t_block			*block;
+	t_header		*header;
+	void			*pointer;
+}					t_maps_enquiry;
+
 void				*malloc(size_t size);
 void				*calloc(size_t count, size_t size);
 void				*realloc(void *ptr, size_t size);
 void				*lalloc(size_t size, void **map);
 void				show_alloc_mem(void);
-
 void				set_malloc_error(void);
+void				release_header(t_header **head, t_header *current);
 
 extern t_maps		g_maps;
 

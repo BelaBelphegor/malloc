@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/21 07:31:33 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/23 16:23:56 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/26 16:49:36 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,35 +34,30 @@ void	release_header(t_header **head, t_header *current)
 
 void	free(void *pointer)
 {
-	t_header	*header;
-	t_block		*block;
-	t_header	*head;
-
+	t_header			*header;
+	t_block				*block;
+	t_maps_enquiry		enquiry;
+	
 	header = NULL;	
 	block = NULL;
 	pthread_mutex_lock(&(g_maps.mutex));
 	if (pointer)
 	{
-		head = g_maps.tiny;
-		// Find block by ptr information.
-		while (head && !block)
+		enquiry = maps_enquiry(pointer);
+		block = enquiry.block;
+		header = enquiry.header;
+		if (block && block->freed == 0 && block->pointer == pointer)
 		{
-			if ((char *)pointer > (char *)head && (void *)pointer
-				< (void *)head + head->size)
+			header->used -= block->size + sizeof(t_block);
+			block->freed = 1;
+			if (header->used == sizeof(t_header) + sizeof(t_block))
+				release_header(enquiry.head, enquiry.header);
+			else if ((block + 1)->size == 0)
 			{
-				block = (t_block *)head + sizeof(t_header);
-				while (block->pointer > pointer || pointer >= block->pointer +
-					(size_t)block->size)
-				{
-					++block;
-					if (!(block->size))
-						// Le bon bloc est trouve le soustraire a l'hdr, signale qu'il est libre, si mon headr est vide le liberer sinon set le bloc suivant a 0.
-						return ;
-				}
+				block->size = 0;
+				block->freed = 0;
 			}
-			head = head->prev;
 		}
-
 	}
 	pthread_mutex_unlock(&(g_maps.mutex));
 }
