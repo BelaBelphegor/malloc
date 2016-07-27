@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/23 14:40:47 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/26 16:53:34 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/27 15:18:11 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ int			main(void)
 		while (i < 1024)
 		{
 			ptr[i] = (char)(48 + (23 % (i + 1)));
-			printf("I: %d\n", i);
 			i++;
 		}
 		printf("Content of 1024 allocated string: %s\n", ptr);
 		printf("Free allocated memory.\n");
 		free(ptr);
-		printf("Value of ptr after free: %s\n", ptr);
+		ptr = NULL;
+/*		printf("Value of ptr after free: %s\n", ptr);
 		i = 0;
 		while (i < 1024)
 		{
@@ -46,6 +46,8 @@ int			main(void)
 			i++;
 		}
 		free(tmp);
+		while (1)
+			; */
 	}
 
 }

@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 14:59:27 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/26 16:47:40 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/27 14:43:07 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct		s_maps
 	t_header		*small;
 	t_header		*large;
 	pthread_mutex_t	mutex;
+	pthread_mutex_t	mutex_free;
 }					t_maps;
 
 typedef struct		s_block

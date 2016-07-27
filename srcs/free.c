@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/21 07:31:33 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/26 16:49:36 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/27 14:51:34 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	free(void *pointer)
 	
 	header = NULL;	
 	block = NULL;
-	pthread_mutex_lock(&(g_maps.mutex));
+	pthread_mutex_lock(&(g_maps.mutex_free));
 	if (pointer)
 	{
 		enquiry = maps_enquiry(pointer);
@@ -59,6 +59,6 @@ void	free(void *pointer)
 			}
 		}
 	}
-	pthread_mutex_unlock(&(g_maps.mutex));
+	pthread_mutex_unlock(&(g_maps.mutex_free));
 }
 

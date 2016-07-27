@@ -6,7 +6,7 @@
 #    By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/10 14:48:27 by tiboitel          #+#    #+#              #
-#    Updated: 2016/07/26 16:52:00 by tiboitel         ###   ########.fr        #
+#    Updated: 2016/07/27 14:50:46 by tiboitel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ endif
 NAME		=	libft_malloc_$(HOSTTYPE).so
 SRCS		=	malloc.c \
 				free.c \
+				show_alloc_memory.c \
+				output.c \
 				tools.c
 INCLUDES	=	./includes
 SRCSPATH	=	./srcs/

@@ -6,13 +6,14 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/21 01:34:08 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/23 16:04:22 by tiboitel         ###   ########.fr       */
+/*   Updated: 2016/07/27 16:47:17 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <malloc.h>
 
-t_maps		g_maps = { NULL, NULL, NULL, PTHREAD_MUTEX_INITIALIZER };
+t_maps		g_maps = {NULL, NULL, NULL,
+	PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER };
 
 void			delete_memory_pool_block(t_block *block, size_t count)
 {
@@ -72,9 +73,9 @@ static t_header	*header_create(t_header **head, size_t size)
 
 	tmp = *head;
 	page_size = getpagesize();
-	if (size <= SMALL)
-		size *= 100;
-	size = (((size + sizeof(t_block) * 2 + sizeof(t_header)) / page_size) + 2) * page_size + 1;
+	if (page_size <= SMALL)
+		page_size *= 100;
+	size = (((size + sizeof(t_block) * 2 + sizeof(t_header)) / page_size) + 1) * page_size + 1;
 	if ((header = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) ==
 		MAP_FAILED)
 		return (NULL);
@@ -88,6 +89,36 @@ static t_header	*header_create(t_header **head, size_t size)
 	return (header);
 }
 
+int				header_check_integrity(t_header *header, size_t size)
+{
+	t_block		*block;
+	size_t		free_size;
+
+	free_size = header->size - sizeof(t_header) - sizeof(t_block);
+	block = (t_block *)header + sizeof(t_header);
+	while (block->size)
+	{
+		if (block->freed && block->size >= size)
+			return (1);
+		free_size -= block->size + sizeof(t_block);
+		++block;
+	}
+	return (free_size >= size + sizeof(t_block));
+}
+
+static t_header	*header_request(t_header **head, size_t size)
+{
+	t_header	*header;
+
+	header = *head;
+	while (header && !(header->size - header->used >= size + sizeof(t_block))
+		&& header_check_integrity(header, size))
+		header = header->prev;
+	if (!header)
+		header = header_create(head, size);
+	return (header);
+}
+
 static t_block	*block_create(t_header *head, size_t size)
 {
 	t_block		*block;
@@ -95,7 +126,7 @@ static t_block	*block_create(t_header *head, size_t size)
 	void		*pointer;
 
 	// First block;
-	block = (t_block *)(void *)head + sizeof(t_header);
+	block = (t_block *)((void *)head + sizeof(t_header));
 	// Header end.
 	pointer = (void *)head + head->size;
 	while (block->size != 0)
@@ -121,7 +152,10 @@ static void		*claim_memory(t_header **head, size_t size)
 	t_header	*header;
 	void		*pointer;
 
-	if (!(header = header_create(head, size)))
+	header = NULL;
+	block = NULL;
+	pointer = NULL;
+	if (!(header = header_request(head, size)))
 		return (NULL);
 	if (!(block = block_create(header, size)))
 		return (NULL);
@@ -143,5 +177,6 @@ void			*malloc(size_t size)
 	else
 		pointer = claim_memory(&(g_maps.large), size);
 	pthread_mutex_unlock(&(g_maps.mutex));
+	show_alloc_mem();
 	return (pointer);
 }
