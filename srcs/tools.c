@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/26 16:33:08 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/26 16:49:58 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/14 18:39:43 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static void			maps_current_block(t_header *header, void *pointer,
 	while (header && !tmp)
 	{
 		if ((char *)pointer > (char *)header && (void *)pointer <
-			(void *)header + header->size)
+			((void *)header + header->size))
 		{
-			tmp = (t_block *)header + sizeof(t_header);
+			tmp = (t_block *)((void *)header + sizeof(t_header));
 			while (tmp->pointer > pointer || pointer >= tmp->pointer
 				+ (size_t)tmp->size)
 			{
@@ -47,10 +47,11 @@ t_maps_enquiry		maps_enquiry(void *pointer)
 	enquiry.head = NULL;
 	enquiry.block = NULL;
 	enquiry.header = NULL;
-	enquiry.pointer = NULL;
+	enquiry.pointer = pointer;
 	if (pointer)
 	{
 		enquiry.head = &g_maps.tiny;
+		maps_current_block(g_maps.tiny, pointer, &enquiry);
 		if (!enquiry.block)
 		{
 			enquiry.head = &g_maps.small;

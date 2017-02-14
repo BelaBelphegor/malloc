@@ -6,7 +6,7 @@
 #    By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/10 14:48:27 by tiboitel          #+#    #+#              #
-#    Updated: 2016/07/27 14:50:46 by tiboitel         ###   ########.fr        #
+#    Updated: 2017/02/14 21:52:18 by tiboitel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,10 +43,11 @@ fclean:			clean
 	rm -rf $(NAME)
 	rm -rf libft_malloc.so
 
-re: fclean all
+re: fclean all test
 
 test: all
 	gcc `pwd`/test/main.c -o `pwd`/test/test
-	env DYLD_LIBRARY_PATH=`pwd` DYLD_INSERT_LIBRARIES=libft_malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 ./test/test
+	/usr/bin/time -l ./test/test
+	env DYLD_LIBRARY_PATH=`pwd` DYLD_INSERT_LIBRARIES=libft_malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 /usr/bin/time -l ./test/test
 
 .PHONY: clean fclean re

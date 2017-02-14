@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/21 07:31:33 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/27 14:51:34 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/14 21:48:57 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	release_header(t_header **head, t_header *current)
 	munmap(current, current->size);
 }
 
-void	free(void *pointer)
+void	free(void *ptr)
 {
 	t_header			*header;
 	t_block				*block;
@@ -41,16 +41,17 @@ void	free(void *pointer)
 	header = NULL;	
 	block = NULL;
 	pthread_mutex_lock(&(g_maps.mutex_free));
-	if (pointer)
+	if (ptr)
 	{
-		enquiry = maps_enquiry(pointer);
+		enquiry = maps_enquiry(ptr);
 		block = enquiry.block;
 		header = enquiry.header;
-		if (block && block->freed == 0 && block->pointer == pointer)
+		if (block && block->freed == 0 && block->pointer == ptr)
 		{
 			header->used -= block->size + sizeof(t_block);
 			block->freed = 1;
-			if (header->used == sizeof(t_header) + sizeof(t_block))
+			if (header->used == sizeof(t_header) + sizeof(t_block) &&
+					header->prev != NULL)
 				release_header(enquiry.head, enquiry.header);
 			else if ((block + 1)->size == 0)
 			{
