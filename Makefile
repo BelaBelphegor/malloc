@@ -6,7 +6,7 @@
 #    By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/10 14:48:27 by tiboitel          #+#    #+#              #
-#    Updated: 2017/02/15 20:56:22 by tiboitel         ###   ########.fr        #
+#    Updated: 2017/02/15 22:32:47 by tiboitel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,6 @@ re: fclean all test
 test: all
 	gcc `pwd`/test/main.c -o `pwd`/test/test
 	/usr/bin/time -l ./test/test
-	env DYLD_LIBRARY_PATH=`pwd` DYLD_INSERT_LIBRARIES=libft_malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 /usr/bin/time -l ls -R ./test/test
+	env DYLD_LIBRARY_PATH=`pwd` DYLD_INSERT_LIBRARIES=libft_malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 /usr/bin/time -l ./test/test
 
 .PHONY: clean fclean re
