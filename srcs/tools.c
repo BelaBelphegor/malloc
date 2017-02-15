@@ -6,14 +6,34 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/26 16:33:08 by tiboitel          #+#    #+#             */
-/*   Updated: 2017/02/14 18:39:43 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/15 21:04:31 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <tools.h>
 #include <malloc.h>
 
-static void			maps_current_block(t_header *header, void *pointer, 
+void				*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	unsigned char	*cdst;
+	unsigned char	*csrc;
+	size_t			i;
+
+	if (src && dst)
+	{
+		i = 0;
+		cdst = dst;
+		csrc = (unsigned char *)src;
+		while (i < n)
+		{
+			cdst[i] = csrc[i];
+			++i;
+		}
+	}
+	return (dst);
+}
+
+static void			maps_current_block(t_header *header, void *pointer,
 		t_maps_enquiry *enquiry)
 {
 	t_block		*tmp;
@@ -22,11 +42,11 @@ static void			maps_current_block(t_header *header, void *pointer,
 	while (header && !tmp)
 	{
 		if ((char *)pointer > (char *)header && (void *)pointer <
-			((void *)header + header->size))
+				((void *)header + header->size))
 		{
 			tmp = (t_block *)((void *)header + sizeof(t_header));
 			while (tmp->pointer > pointer || pointer >= tmp->pointer
-				+ (size_t)tmp->size)
+					+ (size_t)tmp->size)
 			{
 				tmp++;
 				if (!(tmp->size))

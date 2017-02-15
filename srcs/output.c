@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/27 14:43:52 by tiboitel          #+#    #+#             */
-/*   Updated: 2016/07/27 14:54:43 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/15 21:00:49 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_putpointer(void *pointer)
 {
 	size_t	n;
 	char	c;
-	
+
 	n = (size_t)pointer;
 	if (n >= 16)
 		ft_putpointer((void *)(n / 16));
@@ -40,7 +40,7 @@ void	ft_putnbr(size_t size)
 	if (n >= 10)
 		ft_putnbr(n / 10);
 	n %= 10;
-	c = '0'+ n;
+	c = '0' + n;
 	write(1, &c, 1);
 }
 
@@ -52,4 +52,10 @@ void	ft_putstr(const char *s)
 	while (s[i])
 		i++;
 	write(1, s, i);
+}
+
+void	ft_putendl(const char *s)
+{
+	ft_putstr(s);
+	write(1, "\n", 1);
 }

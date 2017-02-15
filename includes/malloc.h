@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 14:59:27 by tiboitel          #+#    #+#             */
-/*   Updated: 2017/02/14 21:48:23 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/15 20:27:01 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef struct		s_maps
 	t_header		*large;
 	pthread_mutex_t	mutex;
 	pthread_mutex_t	mutex_free;
+	pthread_mutex_t	mutex_realloc;
+	pthread_mutex_t	mutex_show;
 }					t_maps;
 
 typedef struct		s_block
@@ -58,6 +60,7 @@ void				*malloc(size_t size);
 void				*calloc(size_t count, size_t size);
 void				*realloc(void *ptr, size_t size);
 void				*lalloc(size_t size, void **map);
+void				free(void *ptr);
 void				show_alloc_mem(void);
 void				set_malloc_error(void);
 void				release_header(t_header **head, t_header *current);

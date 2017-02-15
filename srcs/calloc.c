@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools.h                                            :+:      :+:    :+:   */
+/*   calloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/10 15:25:29 by tiboitel          #+#    #+#             */
-/*   Updated: 2017/02/15 20:34:30 by tiboitel         ###   ########.fr       */
+/*   Created: 2017/02/15 20:13:38 by tiboitel          #+#    #+#             */
+/*   Updated: 2017/02/15 21:00:40 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_TOOL_H
-# define FT_TOOL_H
-
 #include "malloc.h"
-# ifdef DEBUG
-# define D(x) x
-# else
-# define D(x)
-# endif
-t_maps_enquiry		maps_enquiry(void *pointer);
-void				*ft_memcpy(void *dst, const void *src, size_t n);
-void				ft_putpointer(void *pointer);
-void				ft_putnbr(size_t size);
-void				ft_putstr(const char *s);
-void				ft_putendl(const char *s);
-#endif
+#include "tools.h"
+
+void	*calloc(size_t count, size_t size)
+{
+	void	*ptr;
+	size_t	i;
+
+	pthread_mutex_lock(&(g_maps.mutex_free));
+	if (size > 0 && count > (~(size_t)0) / size)
+		return (NULL);
+	size = count * size;
+	ptr = malloc(size);
+	i = -1;
+	while (++i < size)
+		*((unsigned char *)(ptr + i)) = 0;
+	pthread_mutex_unlock(&(g_maps.mutex_free));
+	return (ptr);
+}

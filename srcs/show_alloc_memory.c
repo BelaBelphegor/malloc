@@ -6,18 +6,25 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/27 14:31:55 by tiboitel          #+#    #+#             */
-/*   Updated: 2017/02/13 18:21:24 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/15 21:04:21 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <malloc.h>
 #include <tools.h>
 
+static void			ft_write_total(size_t size)
+{
+	ft_putstr("Total : ");
+	ft_putnbr(size);
+	ft_putstr(" octets\n");
+}
+
 static size_t		show_memory_area(const char *area, t_header *current)
 {
-	t_block		*block;
-	t_block		*first;
-	size_t		size;
+	t_block			*block;
+	t_block			*first;
+	size_t			size;
 
 	size = 0;
 	ft_putstr(area);
@@ -41,13 +48,13 @@ static size_t		show_memory_area(const char *area, t_header *current)
 	return (size);
 }
 
-void		show_alloc_mem(void)
+void				show_alloc_mem(void)
 {
-	t_header	*header;
-	size_t		size;
-	
+	t_header		*header;
+	size_t			size;
+
 	size = 0;
-	pthread_mutex_lock(&(g_maps.mutex_free));
+	pthread_mutex_lock(&(g_maps.mutex_show));
 	header = g_maps.tiny;
 	while (header)
 	{
@@ -66,8 +73,5 @@ void		show_alloc_mem(void)
 		size += show_memory_area("LARGE : ", header);
 		header = header->prev;
 	}
-	ft_putstr("Total : ");
-	ft_putnbr(size);
-	ft_putstr(" octets\n");
-	pthread_mutex_unlock(&(g_maps.mutex_free));
+	pthread_mutex_unlock(&(g_maps.mutex_show));
 }
