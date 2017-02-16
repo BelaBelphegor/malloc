@@ -6,19 +6,20 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 15:25:29 by tiboitel          #+#    #+#             */
-/*   Updated: 2017/02/15 20:34:30 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/16 18:10:05 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_TOOL_H
-# define FT_TOOL_H
+#ifndef FT_TOOLS_H
+# define FT_TOOLS_H
 
-#include "malloc.h"
+# include "malloc.h"
 # ifdef DEBUG
-# define D(x) x
+#  define D(x) x
 # else
-# define D(x)
+#  define D(x)
 # endif
+
 t_maps_enquiry		maps_enquiry(void *pointer);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 void				ft_putpointer(void *pointer);

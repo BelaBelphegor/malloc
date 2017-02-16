@@ -6,7 +6,7 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/21 01:34:08 by tiboitel          #+#    #+#             */
-/*   Updated: 2017/02/15 21:07:08 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/16 18:12:55 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,57 +14,8 @@
 #include "tools.h"
 
 t_maps		g_maps = {NULL, NULL, NULL, PTHREAD_MUTEX_INITIALIZER,
-	PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER };
-
-void			delete_memory_pool_block(t_block *block, size_t count)
-{
-	t_block		*tmp;
-
-	while (block->size)
-	{
-		tmp = block + count;
-		block->size = tmp->size;
-		block->freed = tmp->freed;
-		block->pointer = tmp->pointer;
-		++block;
-	}
-}
-
-size_t			get_memory_pool_size(t_block *block)
-{
-	size_t		size;
-
-	size = 0;
-	while (block->freed && block->size)
-	{
-		size += block->size;
-		++block;
-	}
-	return (size);
-}
-
-t_block			*get_memory_pool_block(t_header *header, t_block *block,
-		size_t size, void *pointer)
-{
-	t_block		*tmp;
-	size_t		freed;
-
-	freed = block->size;
-	tmp = block;
-	while (freed < size)
-	{
-		++tmp;
-		pointer = tmp->pointer;
-		freed += tmp->size;
-	}
-	delete_memory_pool_block(block, ((void *)tmp - (void *)block) /
-			sizeof(t_block));
-	block->size = freed;
-	block->freed = 0;
-	block->pointer = pointer;
-	header->used += block->size + sizeof(t_block);
-	return (block);
-}
+	PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER,
+		PTHREAD_MUTEX_INITIALIZER};
 
 static t_header	*header_create(t_header **head, size_t size)
 {
@@ -90,23 +41,6 @@ static t_header	*header_create(t_header **head, size_t size)
 	block->size = 0;
 	block->freed = 0;
 	return (header);
-}
-
-int				header_check_integrity(t_header *header, size_t size)
-{
-	t_block		*block;
-	size_t		free_size;
-
-	free_size = header->size - sizeof(t_header) - sizeof(t_block);
-	block = (t_block *)((void *)header + sizeof(t_header));
-	while (block->size)
-	{
-		if (block->freed && block->size >= size)
-			return (1);
-		free_size -= block->size + sizeof(t_block);
-		++block;
-	}
-	return (free_size >= size + sizeof(t_block));
 }
 
 static t_header	*header_request(t_header **head, size_t size)

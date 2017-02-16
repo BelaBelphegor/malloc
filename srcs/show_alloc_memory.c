@@ -6,14 +6,14 @@
 /*   By: tiboitel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/27 14:31:55 by tiboitel          #+#    #+#             */
-/*   Updated: 2017/02/15 21:04:21 by tiboitel         ###   ########.fr       */
+/*   Updated: 2017/02/16 18:13:17 by tiboitel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <malloc.h>
 #include <tools.h>
 
-static void			ft_write_total(size_t size)
+void				ft_write_total(size_t size)
 {
 	ft_putstr("Total : ");
 	ft_putnbr(size);
